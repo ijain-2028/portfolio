@@ -15,9 +15,9 @@ export default function ExperiencePage() {
         Where I&apos;ve worked and what I&apos;ve contributed to.
       </p>
       <SectionLabel>All Experience</SectionLabel>
-      <BentoGrid className="lg:grid-cols-2">
+      <BentoGrid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
         {experiences.map((e, i) => (
-          <ExperienceCard key={e.id} experience={e} i={i} />
+          <ExperienceCard key={e.id} experience={e} i={i} compact />
         ))}
       </BentoGrid>
     </div>

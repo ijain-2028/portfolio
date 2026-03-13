@@ -15,9 +15,9 @@ export default function HobbiesPage() {
         What I&apos;m passionate about outside of building.
       </p>
       <SectionLabel>All Interests</SectionLabel>
-      <BentoGrid className="lg:grid-cols-2">
+      <BentoGrid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
         {hobbies.map((h, i) => (
-          <HobbyCard key={h.id} hobby={h} i={i} />
+          <HobbyCard key={h.id} hobby={h} i={i} compact />
         ))}
       </BentoGrid>
     </div>

@@ -15,9 +15,9 @@ export default function SkillsPage() {
         Languages, frameworks, and domains I work with.
       </p>
       <SectionLabel>All Skills</SectionLabel>
-      <BentoGrid className="lg:grid-cols-2">
+      <BentoGrid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
         {skills.map((s, i) => (
-          <SkillCard key={s.id} skill={s} i={i} />
+          <SkillCard key={s.id} skill={s} i={i} compact />
         ))}
       </BentoGrid>
     </div>

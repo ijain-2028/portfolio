@@ -15,9 +15,9 @@ export default function ProjectsPage() {
         Things I&apos;ve built and am building.
       </p>
       <SectionLabel>All Projects</SectionLabel>
-      <BentoGrid className="lg:grid-cols-2">
+      <BentoGrid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
         {projects.map((p, i) => (
-          <ProjectCard key={p.id} project={p} i={i} />
+          <ProjectCard key={p.id} project={p} i={i} compact />
         ))}
       </BentoGrid>
     </div>
