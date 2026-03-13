@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 import { BentoGridItem } from "./ui/bento-grid";
 import { langLogos } from "./lang-logos";
 import type { Project } from "@/data/projects";
@@ -16,7 +17,27 @@ const skillShortDesc: Record<string, { text: string; highlights: string[] }> = {
   domains: { text: "Healthcare & community impact", highlights: ["Healthcare", "impact"] },
 };
 
-// Highlight words for project descriptions
+// Short punchy descriptions for project cards (SkillCard style)
+const projectShortDesc: Record<string, { text: string; highlights: string[] }> = {
+  pulse: { text: "AI-powered mental health support", highlights: ["AI-powered", "mental", "health"] },
+  uplyftz: { text: "Democratizing STEM education globally", highlights: ["STEM", "education", "globally"] },
+};
+
+// Short punchy descriptions for experience cards (SkillCard style)
+const experienceShortDesc: Record<string, { text: string; highlights: string[] }> = {
+  "fidari-platform": { text: "AI-driven care coordination", highlights: ["AI-driven", "care", "coordination"] },
+  growthfactor: { text: "Intelligent AI-powered backend", highlights: ["intelligent", "AI-powered", "backend"] },
+};
+
+// Short punchy descriptions for hobby cards (SkillCard style)
+const hobbyShortDesc: Record<string, { text: string; highlights: string[] }> = {
+  "3d-design": { text: "Creative 3D design & art", highlights: ["3D", "design"] },
+  medicine: { text: "AI in clinical care", highlights: ["AI", "clinical", "care"] },
+  startups: { text: "Building 501(c)(3) products", highlights: ["501(c)(3)", "building", "products"] },
+  teaching: { text: "Hands-on STEM education", highlights: ["STEM", "hands-on", "education"] },
+};
+
+// Highlight words for project descriptions (legacy/fallback)
 const projectHighlights: Record<string, string[]> = {
   pulse: ["AI-powered", "mental", "health"],
   uplyftz: ["STEM", "education", "digital"],
@@ -100,7 +121,7 @@ const icons: Record<string, React.ReactNode> = {
 };
 
 /* ── Project Card ── */
-export function ProjectCard({ project, i = 0 }: { project: Project; i?: number }) {
+export function ProjectCard({ project, i = 0, compact = false }: { project: Project; i?: number; compact?: boolean }) {
   const color = resolveColor(project.labelColor);
 
   return (
@@ -111,39 +132,75 @@ export function ProjectCard({ project, i = 0 }: { project: Project; i?: number }
       glowColor={color}
       icon={
         <div
-          className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+          className={cn(
+            "rounded-xl flex items-center justify-center mb-4",
+            compact ? "w-10 h-10" : "w-12 h-12"
+          )}
           style={{
             background: `linear-gradient(135deg, ${color}26, transparent)`,
             border: `1px solid ${color}33`,
             color: color,
           }}
         >
-          {icons[project.icon]}
+          {compact ? (
+            <div className="scale-75 flex items-center justify-center">
+              {icons[project.icon]}
+            </div>
+          ) : icons[project.icon]}
         </div>
       }
       title={
-        <div className="flex items-center gap-2">
-          <span className="text-lg">{project.title}</span>
-          <span
-            className="glass-pill px-2 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider"
-            style={{ color }}
-          >
-            {project.label}
-          </span>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <span className={cn("font-bold", compact ? "text-sm" : "text-lg")}>{project.title}</span>
+            {!compact && (
+              <span
+                className="glass-pill px-2 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider"
+                style={{ color }}
+              >
+                {project.label}
+              </span>
+            )}
+          </div>
+          {compact && (
+            <span
+              className="w-fit glass-pill px-1.5 py-0.5 rounded-full text-[8px] font-mono uppercase tracking-wider"
+              style={{ color }}
+            >
+              {project.label}
+            </span>
+          )}
         </div>
       }
       description={
-        <div>
-          <p className="line-clamp-3 mb-3">
-            {renderHighlightedText(project.description, projectHighlights[project.id] || [], color)}
+        <div className={cn(compact ? "mt-2" : "")}>
+          <p className={cn(
+            "font-black text-[#222] leading-[0.85] tracking-tighter",
+            compact ? "text-xl @[200px]:text-2xl @[250px]:text-3xl" : "text-2xl @[300px]:text-3xl @[360px]:text-4xl @[450px]:text-5xl @[540px]:text-6xl"
+          )}>
+            {(() => {
+              const desc = projectShortDesc[project.id];
+              if (!desc) return renderHighlightedText(project.description, projectHighlights[project.id] || [], color);
+              return desc.text.split(" ").map((word, wi) => (
+                <span
+                  key={wi}
+                  className={desc.highlights.includes(word) ? "skill-highlight" : ""}
+                  style={desc.highlights.includes(word) ? { "--highlight-color": color } as React.CSSProperties : undefined}
+                >
+                  {word}{" "}
+                </span>
+              ));
+            })()}
           </p>
-          <div className="flex flex-wrap gap-1.5">
-            {project.tags.slice(0, 3).map((t) => (
-              <span key={t} className="glass-pill px-2 py-0.5 rounded-md text-[11px] text-[var(--color-text-muted)] transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/bento:scale-[1.05] group-hover/bento:-translate-y-0.5">
-                {t}
-              </span>
-            ))}
-          </div>
+          {!compact && (
+            <div className="flex flex-wrap gap-1.5 mt-4">
+              {project.tags.slice(0, 3).map((t) => (
+                <span key={t} className="glass-pill px-2 py-0.5 rounded-md text-[11px] text-[var(--color-text-muted)] transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/bento:scale-[1.05] group-hover/bento:-translate-y-0.5">
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       }
     />
@@ -151,7 +208,7 @@ export function ProjectCard({ project, i = 0 }: { project: Project; i?: number }
 }
 
 /* ── Skill Card ── */
-export function SkillCard({ skill, i = 0 }: { skill: Skill; i?: number }) {
+export function SkillCard({ skill, i = 0, compact = false }: { skill: Skill; i?: number; compact?: boolean }) {
   const color = resolveColor(skill.categoryColor);
 
   return (
@@ -163,7 +220,7 @@ export function SkillCard({ skill, i = 0 }: { skill: Skill; i?: number }) {
       header={
         <div className="flex-1 relative p-5 pb-0">
           <h3
-            className="text-xs font-mono uppercase tracking-widest mb-3"
+            className={cn("font-mono uppercase tracking-widest mb-3", compact ? "text-[10px]" : "text-xs")}
             style={{ color }}
           >
             {skill.category}
@@ -174,60 +231,64 @@ export function SkillCard({ skill, i = 0 }: { skill: Skill; i?: number }) {
             Logos are placed in r1c1-3 and r2c1-2 using flex rows.
             The L-shape is an absolutely-positioned single div using clip-path.
           */}
-          <div className="relative" style={{ aspectRatio: "1" }}>
+          <div className="relative @container" style={{ aspectRatio: "1" }}>
             {/* Row 1: 3 logos */}
             <div className="absolute top-0 left-0 right-0 flex gap-2" style={{ height: "calc(33.33% - 5.33px)" }}>
               {skill.items.slice(0, 3).map((s) => (
-                <LogoTile key={s} name={s} />
+                <LogoTile key={s} name={s} compact={compact} />
               ))}
             </div>
 
             {/* Row 2: 2 logos */}
             <div className="absolute left-0 flex gap-2" style={{ top: "calc(33.33% + 2.67px)", height: "calc(33.33% - 5.33px)", width: "calc(66.66% - 4px)" }}>
               {skill.items.slice(3, 5).map((s) => (
-                <LogoTile key={s} name={s} />
+                <LogoTile key={s} name={s} compact={compact} />
               ))}
             </div>
 
-            {/* L-shape: single clipped div */}
-            <div
-              className="absolute"
+            {/* L-shape: single SVG for fill and border to support rounded concave corners */}
+            <svg
+              className="absolute pointer-events-none"
+              viewBox="0 0 150 100"
+              preserveAspectRatio="none"
               style={{
-                top: "calc(33.33% + 2.67px)",
+                top: "calc(33.33% + 5.33px)",
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: "rgba(255,255,255,0.025)",
-                clipPath: "polygon(66.66% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 50%, 66.66% 50%)",
-                borderRadius: "0.75rem",
+                width: "100%",
+                height: "calc(66.66% - 5.33px)",
+                overflow: "visible",
               }}
-            />
-            {/* Border outline for the L-shape using an inset shadow */}
-            <div
-              className="absolute"
-              style={{
-                top: "calc(33.33% + 2.67px)",
-                left: 0,
-                right: 0,
-                bottom: 0,
-                clipPath: "polygon(66.66% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 50%, 66.66% 50%)",
-                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05)",
-                borderRadius: "0.75rem",
-              }}
-            />
+            >
+              <path
+                d="M 100,6 A 6,6 0 0 1 106,0 H 144 A 6,6 0 0 1 150,6 V 94 A 6,6 0 0 1 144,100 H 6 A 6,6 0 0 1 0,94 V 56 A 6,6 0 0 1 6,50 H 94 A 6,6 0 0 0 100,44 V 6 Z"
+                fill="rgba(255,255,255,0.025)"
+              />
+              <path
+                d="M 100,6 A 6,6 0 0 1 106,0 H 144 A 6,6 0 0 1 150,6 V 94 A 6,6 0 0 1 144,100 H 6 A 6,6 0 0 1 0,94 V 56 A 6,6 0 0 1 6,50 H 94 A 6,6 0 0 0 100,44 V 6 Z"
+                fill="none"
+                stroke="rgba(255,255,255,0.05)"
+                strokeWidth="1"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
 
-            {/* Description text over L-shape */}
+            {/* Description text over L-shape — anchored to row 3 to prevent overlap with row 2 logo tiles */}
             <div
               className="absolute flex items-end pointer-events-none"
               style={{
-                top: "calc(33.33% + 2.67px)",
+                top: "calc(66.66% + 5.33px)",
                 left: 0,
                 right: 0,
                 bottom: 0,
-                padding: "1rem",
+                padding: compact ? "0.75rem" : "1rem",
               }}
             >
-              <p className="text-6xl font-black text-[#222] leading-[0.85] tracking-tighter">
+              <p className={cn(
+                "font-black text-[#222] leading-[0.85] tracking-tighter",
+                compact ? "text-xl @[200px]:text-2xl @[250px]:text-3xl" : "text-2xl @[300px]:text-3xl @[360px]:text-4xl @[450px]:text-5xl @[540px]:text-6xl"
+              )}>
                 {(() => {
                   const desc = skillShortDesc[skill.id];
                   if (!desc) return skill.category;
@@ -250,7 +311,7 @@ export function SkillCard({ skill, i = 0 }: { skill: Skill; i?: number }) {
   );
 }
 
-function LogoTile({ name }: { name: string }) {
+function LogoTile({ name, compact = false }: { name: string; compact?: boolean }) {
   const logo = langLogos[name];
   return (
     <div
@@ -260,20 +321,20 @@ function LogoTile({ name }: { name: string }) {
         border: "1px solid rgba(255,255,255,0.06)",
       }}
     >
-      <div className="w-7 h-7">
+      <div className={compact ? "w-5 h-5" : "w-7 h-7"}>
         {logo ? logo.icon : (
           <div className="w-full h-full rounded-lg flex items-center justify-center text-xs font-bold" style={{ background: "rgba(255,255,255,0.05)", color: "var(--color-text-muted)" }}>
             {name.charAt(0)}
           </div>
         )}
       </div>
-      <span className="text-[9px] text-[var(--color-text-muted)] text-center leading-tight px-1">{name}</span>
+      {!compact && <span className="text-[9px] text-[var(--color-text-muted)] text-center leading-tight px-1">{name}</span>}
     </div>
   );
 }
 
 /* ── Hobby Card ── */
-export function HobbyCard({ hobby, i = 0 }: { hobby: Hobby; i?: number }) {
+export function HobbyCard({ hobby, i = 0, compact = false }: { hobby: Hobby; i?: number; compact?: boolean }) {
   // Derive a glow color from the gradient class (extract the hex)
   const gradientMatch = hobby.gradient.match(/#[0-9a-fA-F]{6}/);
   const hobbyGlow = gradientMatch ? gradientMatch[0] : "#3b82f6";
@@ -286,24 +347,48 @@ export function HobbyCard({ hobby, i = 0 }: { hobby: Hobby; i?: number }) {
       glowColor={hobbyGlow}
       icon={
         <div
-          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${hobby.gradient} flex items-center justify-center mb-4`}
+          className={cn(
+            `rounded-xl bg-gradient-to-br ${hobby.gradient} flex items-center justify-center mb-4`,
+            compact ? "w-10 h-10" : "w-12 h-12"
+          )}
           style={{ border: "1px solid rgba(255,255,255,0.06)" }}
         >
-          <span className="text-xl">{hobby.emoji}</span>
+          <span className={compact ? "text-lg" : "text-xl"}>{hobby.emoji}</span>
         </div>
       }
-      title={hobby.title}
+      title={
+        <span className={cn("font-bold", compact ? "text-sm" : "text-lg")}>
+          {hobby.title}
+        </span>
+      }
       description={
-        <p className="line-clamp-3">
-          {renderHighlightedText(hobby.description, hobbyHighlights[hobby.id] || [], hobbyGlow)}
-        </p>
+        <div className={cn(compact ? "mt-2" : "")}>
+          <p className={cn(
+            "font-black text-[#222] leading-[0.85] tracking-tighter",
+            compact ? "text-xl @[200px]:text-2xl @[250px]:text-3xl" : "text-2xl @[300px]:text-3xl @[360px]:text-4xl @[450px]:text-5xl @[540px]:text-6xl"
+          )}>
+            {(() => {
+              const desc = hobbyShortDesc[hobby.id];
+              if (!desc) return renderHighlightedText(hobby.description, hobbyHighlights[hobby.id] || [], hobbyGlow);
+              return desc.text.split(" ").map((word, wi) => (
+                <span
+                  key={wi}
+                  className={desc.highlights.includes(word) ? "skill-highlight" : ""}
+                  style={desc.highlights.includes(word) ? { "--highlight-color": hobbyGlow } as React.CSSProperties : undefined}
+                >
+                  {word}{" "}
+                </span>
+              ));
+            })()}
+          </p>
+        </div>
       }
     />
   );
 }
 
 /* ── Experience Card ── */
-export function ExperienceCard({ experience, i = 0 }: { experience: Experience; i?: number }) {
+export function ExperienceCard({ experience, i = 0, compact = false }: { experience: Experience; i?: number; compact?: boolean }) {
   const color = resolveColor(experience.labelColor);
 
   return (
@@ -315,17 +400,24 @@ export function ExperienceCard({ experience, i = 0 }: { experience: Experience; 
       icon={
         <>
           <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+            className={cn(
+              "rounded-xl flex items-center justify-center mb-4",
+              compact ? "w-10 h-10" : "w-12 h-12"
+            )}
             style={{
               background: `linear-gradient(135deg, ${color}26, transparent)`,
               border: `1px solid ${color}33`,
               color: color,
             }}
           >
-            {icons[experience.icon]}
+            {compact ? (
+              <div className="scale-75 flex items-center justify-center">
+                {icons[experience.icon]}
+              </div>
+            ) : icons[experience.icon]}
           </div>
           {experience.id === "growthfactor" && (
-            <div className="flex-1 flex items-center justify-center py-2">
+            <div className={cn("flex-1 flex items-center justify-center py-2", compact ? "hidden" : "flex")}>
               <img src="/growthfactorlogo.svg" alt="GrowthFactor" style={{ width: "80%", maxWidth: "180px", height: "auto", opacity: 0.9 }} />
             </div>
           )}
@@ -334,29 +426,56 @@ export function ExperienceCard({ experience, i = 0 }: { experience: Experience; 
       title={
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <span className="text-lg">{experience.title}</span>
+            <span className={cn("font-bold", compact ? "text-sm" : "text-lg")}>{experience.title}</span>
+            {!compact && (
+              <span
+                className="glass-pill px-2 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider"
+                style={{ color }}
+              >
+                {experience.label}
+              </span>
+            )}
+          </div>
+          {compact && (
             <span
-              className="glass-pill px-2 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider"
+              className="w-fit glass-pill px-1.5 py-0.5 rounded-full text-[8px] font-mono uppercase tracking-wider"
               style={{ color }}
             >
               {experience.label}
             </span>
-          </div>
-          <span className="text-xs text-[var(--color-text-muted)] font-normal">{experience.role}</span>
+          )}
+          <span className={cn("text-[var(--color-text-muted)] font-normal", compact ? "text-[10px]" : "text-xs")}>{experience.role}</span>
         </div>
       }
       description={
-        <div>
-          <p className="line-clamp-3 mb-3">
-            {renderHighlightedText(experience.description, experienceHighlights[experience.id] || [], color)}
+        <div className={cn(compact ? "mt-2" : "")}>
+          <p className={cn(
+            "font-black text-[#222] leading-[0.85] tracking-tighter",
+            compact ? "text-xl @[200px]:text-2xl @[250px]:text-3xl" : "text-2xl @[300px]:text-3xl @[360px]:text-4xl @[450px]:text-5xl @[540px]:text-6xl"
+          )}>
+            {(() => {
+              const desc = experienceShortDesc[experience.id];
+              if (!desc) return renderHighlightedText(experience.description, experienceHighlights[experience.id] || [], color);
+              return desc.text.split(" ").map((word, wi) => (
+                <span
+                  key={wi}
+                  className={desc.highlights.includes(word) ? "skill-highlight" : ""}
+                  style={desc.highlights.includes(word) ? { "--highlight-color": color } as React.CSSProperties : undefined}
+                >
+                  {word}{" "}
+                </span>
+              ));
+            })()}
           </p>
-          <div className="flex flex-wrap gap-1.5">
-            {experience.tags.slice(0, 3).map((t) => (
-              <span key={t} className="glass-pill px-2 py-0.5 rounded-md text-[11px] text-[var(--color-text-muted)]">
-                {t}
-              </span>
-            ))}
-          </div>
+          {!compact && (
+            <div className="flex flex-wrap gap-1.5 mt-4">
+              {experience.tags.slice(0, 3).map((t) => (
+                <span key={t} className="glass-pill px-2 py-0.5 rounded-md text-[11px] text-[var(--color-text-muted)]">
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       }
     />
