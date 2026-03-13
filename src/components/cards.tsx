@@ -313,16 +313,23 @@ export function ExperienceCard({ experience, i = 0 }: { experience: Experience; 
       href={`/experience/${experience.id}`}
       glowColor={color}
       icon={
-        <div
-          className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-          style={{
-            background: `linear-gradient(135deg, ${color}26, transparent)`,
-            border: `1px solid ${color}33`,
-            color: color,
-          }}
-        >
-          {icons[experience.icon]}
-        </div>
+        <>
+          <div
+            className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+            style={{
+              background: `linear-gradient(135deg, ${color}26, transparent)`,
+              border: `1px solid ${color}33`,
+              color: color,
+            }}
+          >
+            {icons[experience.icon]}
+          </div>
+          {experience.id === "growthfactor" && (
+            <div className="flex-1 flex items-center justify-center py-2">
+              <img src="/growthfactorlogo.svg" alt="GrowthFactor" style={{ width: "80%", maxWidth: "180px", height: "auto", opacity: 0.9 }} />
+            </div>
+          )}
+        </>
       }
       title={
         <div className="flex flex-col gap-1">
