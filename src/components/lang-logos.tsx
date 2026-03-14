@@ -62,20 +62,19 @@ export const langLogos: Record<string, { icon: React.ReactNode; color: string }>
     ),
   },
   // AI/Data logos
-  OpenAI: {
-    color: "#fff",
+  ChatGPT: {
+    color: "#10a37f",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-full h-full" fill="white">
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="currentColor">
         <path d="M22.28 9.37a5.99 5.99 0 0 0-.52-4.93 6.06 6.06 0 0 0-6.52-2.91A5.99 5.99 0 0 0 10.7.28a6.06 6.06 0 0 0-5.78 4.2 5.99 5.99 0 0 0-4 2.9 6.06 6.06 0 0 0 .74 7.12 5.99 5.99 0 0 0 .52 4.93 6.06 6.06 0 0 0 6.52 2.91 5.99 5.99 0 0 0 4.54 1.25 6.06 6.06 0 0 0 5.78-4.2 5.99 5.99 0 0 0 4-2.9 6.06 6.06 0 0 0-.74-7.12zM13.3 22.22a4.5 4.5 0 0 1-2.88-1.04l.14-.08 4.78-2.76a.78.78 0 0 0 .39-.67v-6.74l2.02 1.17a.07.07 0 0 1 .04.06v5.58a4.52 4.52 0 0 1-4.49 4.48zM3.6 18.13a4.48 4.48 0 0 1-.54-3.02l.14.09 4.78 2.76a.77.77 0 0 0 .78 0l5.83-3.37v2.33a.07.07 0 0 1-.03.06l-4.83 2.79a4.52 4.52 0 0 1-6.13-1.64zM2.34 7.9A4.49 4.49 0 0 1 4.7 5.91v5.69a.77.77 0 0 0 .39.67l5.83 3.37-2.02 1.16a.07.07 0 0 1-.07 0L4 13.99a4.52 4.52 0 0 1-1.66-6.1zm17.05 3.97l-5.83-3.37 2.02-1.16a.07.07 0 0 1 .07 0l4.83 2.79a4.51 4.51 0 0 1-.7 8.14v-5.73a.77.77 0 0 0-.39-.67zM21.4 8.89l-.14-.08-4.78-2.76a.77.77 0 0 0-.78 0L9.87 9.42V7.09a.07.07 0 0 1 .03-.06l4.83-2.79a4.51 4.51 0 0 1 6.67 4.65zM8.68 12.91l-2.02-1.16a.07.07 0 0 1-.04-.06V6.11a4.51 4.51 0 0 1 7.38-3.47l-.14.08L9.08 5.5a.78.78 0 0 0-.39.67l-.01 6.74zm1.1-2.37l2.6-1.5 2.6 1.5v3l-2.6 1.5-2.6-1.5v-3z" />
       </svg>
     ),
   },
-  Anthropic: {
-    color: "#d4a574",
+  Claude: {
+    color: "#da7756",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-full h-full" fill="#d4a574">
-        <path d="M13.83 2 8.36 22h3.52l5.47-20h-3.52zM6.64 2 1.17 22h3.52l5.47-20H6.64z" opacity="0.6" />
-        <path d="M13.83 2l5.47 20h3.52L17.35 2h-3.52z" />
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="currentColor">
+        <path d="M11.75 3.5c-.55 0-1 .45-1 1v15c0 .55.45 1 1 1s1-.45 1-1v-15c0-.55-.45-1-1-1zm-6 3c-.55 0-1 .45-1 1v9c0 .55.45 1 1 1s1-.45 1-1v-9c0-.55-.45-1-1-1zm12 3c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1s1-.45 1-1v-3c0-.55-.45-1-1-1z" opacity="0.8" />
       </svg>
     ),
   },
@@ -93,23 +92,70 @@ export const langLogos: Record<string, { icon: React.ReactNode; color: string }>
     ),
   },
   Cursor: {
-    color: "#fff",
+    color: "#3b82f6",
     icon: (
-      <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
-        <rect x="8" y="8" width="48" height="48" rx="12" fill="white" opacity="0.15" />
-        <path d="M20 18l24 14-24 14V18z" fill="white" opacity="0.9" />
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="currentColor">
+        <path d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23" />
       </svg>
     ),
   },
   "Claude Code": {
-    color: "#d4a574",
+    color: "#da7756",
     icon: (
-      <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
-        <rect x="6" y="10" width="52" height="36" rx="6" fill="#d4a574" opacity="0.15" stroke="#d4a574" strokeWidth="2" />
-        <text x="32" y="34" textAnchor="middle" fontSize="14" fill="#d4a574" fontFamily="monospace" fontWeight="bold">&gt;_</text>
-        <rect x="14" y="50" width="36" height="4" rx="2" fill="#d4a574" opacity="0.3" />
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="2">
+        <rect x="2" y="4" width="20" height="16" rx="3" opacity="0.2" fill="currentColor" />
+        <path d="M7 10l3 2-3 2M13 14h4" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
+  },
+  // Domain logos
+  "Health-Tech": {
+    color: "#ef4444",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M12 5v14M5 12h14" opacity="0.3" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    )
+  },
+  Nephrology: {
+    color: "#3b82f6",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="currentColor">
+        <path d="M8 5c-1.5 0-3 1-3 3.5S6.5 13 8 13c.5 0 1-.1 1.5-.3V18c0 1.1.9 2 2 2h1c1.1 0 2-.9 2-2V12.7c.5.2 1 .3 1.5.3 1.5 0 3-2 3-4.5S17.5 5 16 5s-3 1-3 3.5.5 2.5 1 3V18c0 .5-.5 1-1 1h-1c-.5 0-1-.5-1-1V11.5c.5-.5 1-1.5 1-3 0-2.5-1.5-3.5-3-3.5z" opacity="0.8" />
+        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.2" />
+      </svg>
+    )
+  },
+  Oncology: {
+    color: "#8b5cf6",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="12" cy="12" r="9" opacity="0.2" fill="currentColor" />
+        <path d="M12 2v20M2 12h20" strokeLinecap="round" strokeLinejoin="round" opacity="0.5"/>
+        <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5z" fill="currentColor" />
+      </svg>
+    )
+  },
+  "Nonprofit Management": {
+    color: "#10b981",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M12 21c-4.97 0-9-4.03-9-9s4.03-9 9-9 9 4.03 9 9-4.03 9-9 9z" strokeLinecap="round" strokeLinejoin="round" opacity="0.2" fill="currentColor"/>
+        <path d="M12 17l-1-1c-2.5-2.5-2.5-4.5 0-7 2.5 2.5 2.5 4.5 0 7l1 1z" fill="currentColor" />
+        <path d="M12 7v10M8 12h8" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    )
+  },
+  "Real Estate Tech": {
+    color: "#f59e0b",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" strokeLinecap="round" strokeLinejoin="round" fill="currentColor" opacity="0.1"/>
+        <path d="M9 22V12h6v10" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M2 12h2M20 12h2M12 2v2" opacity="0.5" strokeLinecap="round" />
+      </svg>
+    )
   },
   // Product & Operations logos
   GitHub: {
