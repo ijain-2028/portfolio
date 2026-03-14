@@ -19,7 +19,7 @@ export const skills: Skill[] = [
     id: "ai-ml",
     category: "AI & Data",
     categoryColor: "var(--color-accent-2)",
-    items: ["OpenAI", "Anthropic", "Gemini", "Cursor", "Claude Code"],
+    items: ["ChatGPT", "Claude", "Gemini", "Cursor", "Claude Code"],
     description:
       "Hands-on experience building with leading AI platforms — from GPT and Claude to Gemini. Using modern AI-native tools like Cursor and Claude Code to accelerate development.",
   },
