@@ -68,6 +68,56 @@ function resolveColor(color: string): string {
   return CSS_VAR_MAP[color] || color;
 }
 
+const SKILL_CARD_L_SHAPE_VIEWBOX = {
+  width: 150,
+  height: 100,
+  notchX: 100,
+  notchY: 50,
+} as const;
+
+function buildRoundedLShapePath({
+  left,
+  top,
+  right,
+  bottom,
+  notchX,
+  notchY,
+  radius,
+}: {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+  notchX: number;
+  notchY: number;
+  radius: number;
+}) {
+  const safeRadius = Math.min(
+    radius,
+    (right - notchX) / 2,
+    (bottom - notchY) / 2,
+    notchY - top,
+    notchX - left
+  );
+
+  return [
+    `M ${notchX},${top + safeRadius}`,
+    `A ${safeRadius},${safeRadius} 0 0 1 ${notchX + safeRadius},${top}`,
+    `H ${right - safeRadius}`,
+    `A ${safeRadius},${safeRadius} 0 0 1 ${right},${top + safeRadius}`,
+    `V ${bottom - safeRadius}`,
+    `A ${safeRadius},${safeRadius} 0 0 1 ${right - safeRadius},${bottom}`,
+    `H ${left + safeRadius}`,
+    `A ${safeRadius},${safeRadius} 0 0 1 ${left},${bottom - safeRadius}`,
+    `V ${notchY + safeRadius}`,
+    `A ${safeRadius},${safeRadius} 0 0 1 ${left + safeRadius},${notchY}`,
+    `H ${notchX - safeRadius}`,
+    `A ${safeRadius},${safeRadius} 0 0 0 ${notchX},${notchY - safeRadius}`,
+    `V ${top + safeRadius}`,
+    "Z",
+  ].join(" ");
+}
+
 /* ── Highlight helper ── */
 function renderHighlightedText(text: string, highlights: string[], color: string) {
   if (!highlights.length) return text;
@@ -210,6 +260,38 @@ export function ProjectCard({ project, i = 0, compact = false }: { project: Proj
 /* ── Skill Card ── */
 export function SkillCard({ skill, i = 0, compact = false }: { skill: Skill; i?: number; compact?: boolean }) {
   const color = resolveColor(skill.categoryColor);
+  const gridGapPx = 8;
+  const oneThird = "33.33%";
+  const twoThirds = "66.66%";
+  const rowOffsetPx = Number((gridGapPx / 3).toFixed(2));
+  const rowTrimPx = Number((((gridGapPx * 2) / 3)).toFixed(2));
+  const twoColumnTrimPx = gridGapPx / 2;
+  const rowHeight = `calc(${oneThird} - ${rowTrimPx}px)`;
+  const secondRowTop = `calc(${oneThird} + ${rowOffsetPx}px)`;
+  const secondRowWidth = `calc(${twoThirds} - ${twoColumnTrimPx}px)`;
+  const lShapeTop = secondRowTop;
+  const lShapeHeight = `calc(${twoThirds} - ${rowOffsetPx}px)`;
+  const descriptionTop = `calc(${twoThirds} + ${rowOffsetPx}px)`;
+  const shapeCornerRadius = 5;
+  const fillPath = buildRoundedLShapePath({
+    left: 0,
+    top: 0,
+    right: SKILL_CARD_L_SHAPE_VIEWBOX.width,
+    bottom: SKILL_CARD_L_SHAPE_VIEWBOX.height,
+    notchX: SKILL_CARD_L_SHAPE_VIEWBOX.notchX,
+    notchY: SKILL_CARD_L_SHAPE_VIEWBOX.notchY,
+    radius: shapeCornerRadius,
+  });
+  const strokeInset = 0.5;
+  const strokePath = buildRoundedLShapePath({
+    left: strokeInset,
+    top: strokeInset,
+    right: SKILL_CARD_L_SHAPE_VIEWBOX.width - strokeInset,
+    bottom: SKILL_CARD_L_SHAPE_VIEWBOX.height - strokeInset,
+    notchX: SKILL_CARD_L_SHAPE_VIEWBOX.notchX - strokeInset,
+    notchY: SKILL_CARD_L_SHAPE_VIEWBOX.notchY - strokeInset,
+    radius: shapeCornerRadius,
+  });
 
   return (
     <BentoGridItem
@@ -229,18 +311,18 @@ export function SkillCard({ skill, i = 0, compact = false }: { skill: Skill; i?:
           {/*
             Manual layout: the container is divided into a 3×3 conceptual grid.
             Logos are placed in r1c1-3 and r2c1-2 using flex rows.
-            The L-shape is an absolutely-positioned single div using clip-path.
+            The L-shape SVG shares the same grid constants so the notch tracks the logo gap exactly.
           */}
           <div className="relative @container" style={{ aspectRatio: "1" }}>
             {/* Row 1: 3 logos */}
-            <div className="absolute top-0 left-0 right-0 flex gap-2" style={{ height: "calc(33.33% - 5.33px)" }}>
+            <div className="absolute top-0 left-0 right-0 flex gap-2" style={{ height: rowHeight }}>
               {skill.items.slice(0, 3).map((s) => (
                 <LogoTile key={s} name={s} compact={compact} />
               ))}
             </div>
 
             {/* Row 2: 2 logos */}
-            <div className="absolute left-0 flex gap-2" style={{ top: "calc(33.33% + 2.67px)", height: "calc(33.33% - 5.33px)", width: "calc(66.66% - 4px)" }}>
+            <div className="absolute left-0 flex gap-2" style={{ top: secondRowTop, height: rowHeight, width: secondRowWidth }}>
               {skill.items.slice(3, 5).map((s) => (
                 <LogoTile key={s} name={s} compact={compact} />
               ))}
@@ -249,27 +331,28 @@ export function SkillCard({ skill, i = 0, compact = false }: { skill: Skill; i?:
             {/* L-shape: single SVG for fill and border to support rounded concave corners */}
             <svg
               className="absolute pointer-events-none"
-              viewBox="0 0 150 100"
+              viewBox={`0 0 ${SKILL_CARD_L_SHAPE_VIEWBOX.width} ${SKILL_CARD_L_SHAPE_VIEWBOX.height}`}
               preserveAspectRatio="none"
               style={{
-                top: "calc(33.33% + 5.33px)",
+                top: lShapeTop,
                 left: 0,
                 right: 0,
                 bottom: 0,
                 width: "100%",
-                height: "calc(66.66% - 5.33px)",
+                height: lShapeHeight,
                 overflow: "visible",
               }}
             >
               <path
-                d="M 100,6 A 6,6 0 0 1 106,0 H 144 A 6,6 0 0 1 150,6 V 94 A 6,6 0 0 1 144,100 H 6 A 6,6 0 0 1 0,94 V 56 A 6,6 0 0 1 6,50 H 94 A 6,6 0 0 0 100,44 V 6 Z"
+                d={fillPath}
                 fill="rgba(255,255,255,0.025)"
               />
               <path
-                d="M 100,6 A 6,6 0 0 1 106,0 H 144 A 6,6 0 0 1 150,6 V 94 A 6,6 0 0 1 144,100 H 6 A 6,6 0 0 1 0,94 V 56 A 6,6 0 0 1 6,50 H 94 A 6,6 0 0 0 100,44 V 6 Z"
+                d={strokePath}
                 fill="none"
                 stroke="rgba(255,255,255,0.05)"
                 strokeWidth="1"
+                strokeLinejoin="round"
                 vectorEffect="non-scaling-stroke"
               />
             </svg>
@@ -278,7 +361,7 @@ export function SkillCard({ skill, i = 0, compact = false }: { skill: Skill; i?:
             <div
               className="absolute flex items-end pointer-events-none"
               style={{
-                top: "calc(66.66% + 5.33px)",
+                top: descriptionTop,
                 left: 0,
                 right: 0,
                 bottom: 0,
@@ -321,14 +404,19 @@ function LogoTile({ name, compact = false }: { name: string; compact?: boolean }
         border: "1px solid rgba(255,255,255,0.06)",
       }}
     >
-      <div className={compact ? "w-5 h-5" : "w-7 h-7"}>
+      <div className={compact ? "w-4 h-4" : "w-7 h-7"}>
         {logo ? logo.icon : (
-          <div className="w-full h-full rounded-lg flex items-center justify-center text-xs font-bold" style={{ background: "rgba(255,255,255,0.05)", color: "var(--color-text-muted)" }}>
+          <div className="w-full h-full rounded-lg flex items-center justify-center text-[10px] font-bold" style={{ background: "rgba(255,255,255,0.05)", color: "var(--color-text-muted)" }}>
             {name.charAt(0)}
           </div>
         )}
       </div>
-      {!compact && <span className="text-[9px] text-[var(--color-text-muted)] text-center leading-tight px-1">{name}</span>}
+      <span className={cn(
+        "text-[var(--color-text-muted)] text-center leading-tight px-1 font-medium",
+        compact ? "text-[7px]" : "text-[9px]"
+      )}>
+        {name}
+      </span>
     </div>
   );
 }
@@ -417,8 +505,17 @@ export function ExperienceCard({ experience, i = 0, compact = false }: { experie
             ) : icons[experience.icon]}
           </div>
           {experience.id === "growthfactor" && (
-            <div className={cn("flex-1 flex items-center justify-center py-2", compact ? "hidden" : "flex")}>
-              <img src="/growthfactorlogo.svg" alt="GrowthFactor" style={{ width: "80%", maxWidth: "180px", height: "auto", opacity: 0.9 }} />
+            <div className="flex-1 flex items-center justify-center py-2">
+              <img
+                src="/GrowthFactorLogo.svg"
+                alt="GrowthFactor"
+                style={{
+                  width: compact ? "60%" : "80%",
+                  maxWidth: compact ? "120px" : "180px",
+                  height: "auto",
+                  opacity: 0.9
+                }}
+              />
             </div>
           )}
         </>
