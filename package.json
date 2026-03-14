@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "bun --bun next dev --turbopack",
-    "build": "bun --bun next build",
-    "start": "bun --bun next start"
+    "build": "next build",
+    "start": "next start"
   },
   "keywords": [],
   "author": "",
