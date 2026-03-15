@@ -82,10 +82,10 @@ export default function Home() {
           {/* Right — 2×2 card grid */}
           <div className="grid grid-cols-2 gap-4">
             {heroProjects.map((p, i) => (
-              <ProjectCard key={p.id} project={p} i={i} />
+              <ProjectCard key={p.id} project={p} i={i} eager />
             ))}
             {heroHobbies.map((h, i) => (
-              <HobbyCard key={h.id} hobby={h} i={i + 2} />
+              <HobbyCard key={h.id} hobby={h} i={i + 2} eager />
             ))}
           </div>
         </div>

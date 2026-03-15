@@ -171,12 +171,13 @@ const icons: Record<string, React.ReactNode> = {
 };
 
 /* ── Project Card ── */
-export function ProjectCard({ project, i = 0, compact = false }: { project: Project; i?: number; compact?: boolean }) {
+export function ProjectCard({ project, i = 0, compact = false, eager = false }: { project: Project; i?: number; compact?: boolean; eager?: boolean }) {
   const color = resolveColor(project.labelColor);
 
   return (
     <BentoGridItem
       i={i}
+      eager={eager}
       className="aspect-square card-hover-group"
       href={`/projects/${project.id}`}
       glowColor={color}
@@ -422,7 +423,7 @@ function LogoTile({ name, compact = false }: { name: string; compact?: boolean }
 }
 
 /* ── Hobby Card ── */
-export function HobbyCard({ hobby, i = 0, compact = false }: { hobby: Hobby; i?: number; compact?: boolean }) {
+export function HobbyCard({ hobby, i = 0, compact = false, eager = false }: { hobby: Hobby; i?: number; compact?: boolean; eager?: boolean }) {
   // Derive a glow color from the gradient class (extract the hex)
   const gradientMatch = hobby.gradient.match(/#[0-9a-fA-F]{6}/);
   const hobbyGlow = gradientMatch ? gradientMatch[0] : "#3b82f6";
@@ -430,6 +431,7 @@ export function HobbyCard({ hobby, i = 0, compact = false }: { hobby: Hobby; i?:
   return (
     <BentoGridItem
       i={i}
+      eager={eager}
       className="aspect-square card-hover-group"
       href={`/hobbies/${hobby.id}`}
       glowColor={hobbyGlow}

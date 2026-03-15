@@ -32,6 +32,7 @@ export function BentoGridItem({
   href,
   i = 0,
   glowColor,
+  eager = false,
 }: {
   className?: string;
   title?: string | React.ReactNode;
@@ -41,6 +42,7 @@ export function BentoGridItem({
   href?: string;
   i?: number;
   glowColor?: string;
+  eager?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -83,9 +85,10 @@ export function BentoGridItem({
       ref={ref}
       custom={i}
       initial={{ opacity: 0, y: 24, scale: 0.97 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ delay: i * 0.08, duration: 0.55, ease: "easeOut" }}
+      {...(eager
+        ? { animate: { opacity: 1, y: 0, scale: 1 } }
+        : { whileInView: { opacity: 1, y: 0, scale: 1 }, viewport: { once: true, margin: "-40px" } })}
+      transition={{ delay: eager ? i * 0.06 : i * 0.08, duration: 0.45, ease: "easeOut" }}
       onMouseMove={handleMouse}
       style={glowColor ? { "--glow-color": glowColor } as React.CSSProperties : undefined}
       className={cn(
