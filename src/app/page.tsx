@@ -30,9 +30,9 @@ export default function Home() {
     <div className="min-h-screen relative">
       {/* Hero — intro text left, 2×2 card grid right */}
       <section className="relative min-h-screen flex items-center overflow-hidden px-6 md:px-8 py-24">
-        <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] rounded-full bg-[var(--color-accent)]/8 blur-[150px]" />
-        <div className="absolute bottom-1/4 -right-32 w-[500px] h-[500px] rounded-full bg-[var(--color-accent-2)]/8 blur-[150px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[var(--color-accent-3)]/5 blur-[120px]" />
+        <div className="absolute top-1/4 -left-32 w-[500px] h-[500px]" style={{ background: "radial-gradient(circle, color-mix(in srgb, var(--color-accent) 8%, transparent) 0%, transparent 70%)" }} />
+        <div className="absolute bottom-1/4 -right-32 w-[500px] h-[500px]" style={{ background: "radial-gradient(circle, color-mix(in srgb, var(--color-accent-2) 8%, transparent) 0%, transparent 70%)" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px]" style={{ background: "radial-gradient(circle, color-mix(in srgb, var(--color-accent-3) 5%, transparent) 0%, transparent 70%)" }} />
 
         <div className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left — intro */}
