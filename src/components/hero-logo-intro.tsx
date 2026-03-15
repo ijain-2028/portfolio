@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform, type MotionValue } from "framer-motion";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { ProjectCard, HobbyCard } from "@/components/cards";
 import type { Project } from "@/data/projects";
@@ -234,8 +234,8 @@ function HeroCardsColumn({
 }: {
   heroProjects: Project[];
   heroHobbies: Hobby[];
-  flyProgress: ReturnType<typeof useTransform>;
-  scaleProgress: ReturnType<typeof useTransform>;
+  flyProgress: MotionValue<number>;
+  scaleProgress: MotionValue<number>;
 }) {
   const flyLeft = useTransform(flyProgress, (v) => lerp(-120, 0, v));
   const flyRight = useTransform(flyProgress, (v) => lerp(120, 0, v));
