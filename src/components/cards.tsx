@@ -71,8 +71,8 @@ function resolveColor(color: string): string {
 const SKILL_CARD_L_SHAPE_VIEWBOX = {
   width: 150,
   height: 100,
-  notchX: 100,
-  notchY: 50,
+  notchX: 102,
+  notchY: 52,
 } as const;
 
 function buildRoundedLShapePath({
